@@ -30,7 +30,7 @@ export default function ChessLessonCard() {
 
         <div className="flex items-start gap-4">
           <img
-            src="/assets/img/anna-rudolf.jpg"
+            src="public/assets/img/anna-rudolf.jpg"
             alt="Anna Rudolf"
             className="w-16 h-16 object-cover rounded-md border border-[#c29d5d]/40 bg-[#232526] shadow"
           />

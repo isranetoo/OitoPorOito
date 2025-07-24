@@ -21,7 +21,7 @@ export default function ChessPuzzleCard() {
 
         <div className="flex items-start gap-4">
           <img
-            src="/assets/img/hikaru-nakamura.jpg"
+            src="assets/img/hikaru-nakamura.jpg"
             alt="Hikaru Nakamura"
             className="w-16 h-16 object-cover rounded-md border border-[#c29d5d]/40 bg-[#232526] shadow"
           />
