@@ -6,6 +6,7 @@ import CTA from "./components/CTA";
 import ChessPuzzleCard from './components/ChessPuzzleCard';
 import ChessLessonCard from './components/ChessLessonCard';
 import ChessNewsGrid from "./components/ChessNewsGrid";
+import DownloadAppScreen from "./components/DownloadAppScreen";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <ChessNewsGrid />
           
         </div>
+        <DownloadAppScreen />
       </main>
       <Footer />
     </div>
