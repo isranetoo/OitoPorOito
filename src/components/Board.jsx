@@ -23,7 +23,8 @@ export default function Board() {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="grid grid-cols-8 grid-rows-8 w-[480px] h-[480px] border-2 border-white"
+      className="grid grid-cols-8 grid-rows-8 w-[80vw] sm:w-[70vw] md:w-[480px] max-w-[480px] h-[80vw] sm:h-[70vw] md:h-[480px] max-h-[480px] min-w-[180px] min-h-[180px] border-2 border-white"
+      style={{ aspectRatio: '1 / 1' }}
     >
       {Array.from({ length: 64 }, (_, i) => {
         const row = Math.floor(i / 8);
@@ -40,7 +41,7 @@ export default function Board() {
               <img
                 src={`/assets/pieces/${pieceMap[piece]}`}
                 alt={piece}
-                className="w-14 h-14 pointer-events-none"
+                className="w-5 h-5 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-14 lg:h-14 pointer-events-none"
                 draggable={false}
               />
             )}
