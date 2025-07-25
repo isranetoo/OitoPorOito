@@ -14,6 +14,20 @@ export default function DownloadAppScreen() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Impede scroll vertical e horizontal no body quando o modal está aberto
+  useEffect(() => {
+    if (show) {
+      const originalOverflowX = document.body.style.overflowX;
+      const originalOverflowY = document.body.style.overflowY;
+      document.body.style.overflowX = 'hidden';
+      document.body.style.overflowY = 'hidden';
+      return () => {
+        document.body.style.overflowX = originalOverflowX;
+        document.body.style.overflowY = originalOverflowY;
+      };
+    }
+  }, [show]);
+
   if (!show) return null;
 
   return (
@@ -21,8 +35,8 @@ export default function DownloadAppScreen() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className="fixed top-0 left-0 w-[100vw] h-[100vh] z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] text-white px-0"
-      style={{ minHeight: '100vh', minWidth: '100vw', maxWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}
+      className="fixed top-0 left-0 w-full h-full z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] text-white px-0 overflow-x-hidden"
+      style={{ minHeight: '100dvh', minWidth: '100vw', maxWidth: '100vw', maxHeight: '100dvh', overflowY: 'hidden', overflowX: 'hidden' }}
     >
       <div className="flex-1 flex flex-col items-center justify-center w-full px-6">
         <img

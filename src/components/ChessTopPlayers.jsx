@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import chessData from "../data/chessData"; // Adjust the path as necessary
 
 const MODES = ["Standard", "Rapid", "Blitz"];
@@ -11,9 +12,16 @@ const getFlagUrl = (countryCode) =>
 const ChessTopPlayers = () => {
   const [mode, setMode] = useState("Standard");
   const [category, setCategory] = useState("Open");
+  const navigate = useNavigate();
 
   return (
-    <div className="text-white">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      className="text-white"
+    >
+      {/* ...existing code... */}
       <h2 className="text-xl font-bold mb-4">Top Chess Players</h2>
 
       <div className="flex gap-2 mb-4">
@@ -86,14 +94,15 @@ const ChessTopPlayers = () => {
       </table>
       {/* Botão See more */}
       <div className="flex justify-center mt-4">
-        <a
-          href="/top-players"
-          className="bg-[#d4af37] text-black px-6 py-2 rounded-full font-semibold hover:bg-[#bfa133] transition-colors"
+        <button
+          onClick={() => navigate("/ratings-players")}
+          className="text-[#d4af37] font-semibold px-4 rounded hover:underline focus:outline-none"
+          style={{ background: 'none', border: 'none' }}
         >
           See more
-        </a>
+        </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

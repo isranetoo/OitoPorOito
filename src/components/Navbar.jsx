@@ -26,8 +26,12 @@ export default function Navbar() {
           </svg>
         </button>
         <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-          <img src="/assets/logo.png" alt="Logo" className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 object-contain drop-shadow-lg rounded-full border border-[#c29d5d] bg-[#232526] p-1" />
-          <img src="/assets/oitoporoito.png" alt="OitoPorOito" className="h-7 sm:h-8 md:h-10 object-contain" />
+          <a href="/">
+            <img src="/assets/logo.png" alt="Logo" className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 object-contain drop-shadow-lg rounded-full border border-[#c29d5d] bg-[#232526] p-1" />
+          </a>
+          <a href="/">
+            <img src="/assets/oitoporoito.png" alt="OitoPorOito" className="h-7 sm:h-8 md:h-10 object-contain" />
+          </a>
         </div>
       </div>
 
