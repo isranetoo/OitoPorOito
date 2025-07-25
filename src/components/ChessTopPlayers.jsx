@@ -59,7 +59,7 @@ const ChessTopPlayers = () => {
         </thead>
         <tbody>
           {Array.isArray(chessData?.[mode]?.[category]) && chessData[mode][category].length > 0 ? (
-            chessData[mode][category].map((player, idx) => (
+            chessData[mode][category].slice(0, 10).map((player, idx) => (
               <tr key={player.name}>
                 <td className="py-1 px-2 font-bold text-[#d4af37]">{idx + 1}</td>
                 <td className="py-1 px-2 flex items-center gap-2">
@@ -84,6 +84,15 @@ const ChessTopPlayers = () => {
           )}
         </tbody>
       </table>
+      {/* Botão See more */}
+      <div className="flex justify-center mt-4">
+        <a
+          href="/top-players"
+          className="bg-[#d4af37] text-black px-6 py-2 rounded-full font-semibold hover:bg-[#bfa133] transition-colors"
+        >
+          See more
+        </a>
+      </div>
     </div>
   );
 };
