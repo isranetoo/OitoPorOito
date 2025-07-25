@@ -7,6 +7,7 @@ import ChessPuzzleCard from './components/ChessPuzzleCard';
 import ChessLessonCard from './components/ChessLessonCard';
 import ChessNewsGrid from "./components/ChessNewsGrid";
 import DownloadAppScreen from "./components/DownloadAppScreen";
+import ChessTopPlayers from './components/ChessTopPlayers';
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
           <ChessNewsGrid />
           
         </div>
+        <div className="min-h-screen p-8">
+      <ChessTopPlayers />
+    </div>
         <DownloadAppScreen />
       </main>
       <Footer />
