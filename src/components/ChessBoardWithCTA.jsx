@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ChessBoardWithCTA() {
   const pieceMap = {
@@ -7,12 +7,42 @@ export default function ChessBoardWithCTA() {
     wK: "wK.png", wQ: "wQ.png", wR: "wR.png", wN: "wN.png", wB: "wB.png", wP: "wP.png",
   };
 
-  const piecePositions = {
-    0: ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
-    1: ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
-    6: ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
-    7: ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
-  };
+  // Simulações de jogadas (estado do tabuleiro em diferentes momentos)
+  const moves = [
+    {
+      0: ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
+      1: ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
+      6: ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
+      7: ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
+    },
+    {
+      0: ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
+      1: ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
+      4: [null, null, null, null, "wP"],
+      6: ["wP", "wP", "wP", "wP", null, "wP", "wP", "wP"],
+      7: ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
+    },
+    {
+      0: ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
+      2: [null, null, null, null, "bP"],
+      1: ["bP", "bP", "bP", "bP", null, "bP", "bP", "bP"],
+      4: [null, null, null, null, "wP"],
+      6: ["wP", "wP", "wP", "wP", null, "wP", "wP", "wP"],
+      7: ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
+    }
+  ];
+
+  const [boardIndex, setBoardIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBoardIndex((prev) => (prev + 1) % moves.length);
+    }, 2000); 
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const piecePositions = moves[boardIndex];
 
   return (
     <div className="w-[900px] flex flex-col md:flex-row items-start justify-between gap-8">
@@ -28,19 +58,27 @@ export default function ChessBoardWithCTA() {
           const col = i % 8;
           const isLight = (row + col) % 2 === 0;
           const piece = piecePositions[row]?.[col] || "";
+
           return (
             <div
               key={i}
               className={`w-full h-full flex items-center justify-center ${isLight ? "bg-[#f0d9b5]" : "bg-[#b58863]"}`}
             >
-              {piece && (
-                <img
-                  src={`/assets/pieces/${pieceMap[piece]}`}
-                  alt={piece}
-                  className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 pointer-events-none"
-                  draggable={false}
-                />
-              )}
+              <AnimatePresence>
+                {piece && (
+                  <motion.img
+                    key={piece + i}
+                    src={`/assets/pieces/${pieceMap[piece]}`}
+                    alt={piece}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 pointer-events-none"
+                    draggable={false}
+                  />
+                )}
+              </AnimatePresence>
             </div>
           );
         })}
