@@ -3,7 +3,7 @@ import React from "react";
 export default function PlayerInfo({ avatar, name, rating, flagUrl, flagAlt = "", isBot }) {
   return (
     <div
-      className={`flex items-center justify-between w-full max-w-xs md:max-w-sm border border-[#d4af37] bg-[#232526]/70 rounded-xl px-3 py-2 shadow-lg ${isBot ? "mb-4" : "mt-4"}`}
+      className={`flex items-center justify-start w-full border border-[#d4af37] bg-[#232526]/70 rounded-xl px-3 py-2 shadow-lg ${isBot ? "mb-4" : "mt-4"}`}
       style={{ minWidth: 0 }}
     >
       <div className="flex items-center gap-2 min-w-0">
