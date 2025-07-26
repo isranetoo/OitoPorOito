@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import { motion } from "framer-motion";
-import stockfish from "stockfish.wasm";
+import createStockfish from "../../utils/stockfishLoader";
 
 function ChessBoard({ stockfishLevel, gameStarted }) {
   const [game] = useState(new Chess());
@@ -21,8 +21,8 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
   useEffect(() => {
     if (!gameStarted) return;
 
-    // stockfish.wasm returns a Web Worker that runs the engine
-    stockfishRef.current = stockfish();
+    // create the Stockfish Web Worker from public/stockfish
+    stockfishRef.current = createStockfish();
     stockfishRef.current.postMessage("uci");
 
     const onMessage = (e) => {
@@ -36,9 +36,6 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
         setEngineReady(true);
         addLog("Engine pronta.");
 
-        // Teste manual
-        stockfishRef.current.postMessage("position startpos");
-        stockfishRef.current.postMessage("go depth 10");
       } else if (msg.startsWith("bestmove")) {
         const move = msg.split(" ")[1];
         if (move && move !== "(none)") {
