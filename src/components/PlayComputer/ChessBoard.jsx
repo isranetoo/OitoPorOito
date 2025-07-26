@@ -11,6 +11,7 @@ export default function ChessBoard() {
   const [isUserTurn, setIsUserTurn] = useState(true);
   const stockfishRef = useRef(null);
   const [selectedSquare, setSelectedSquare] = useState(null);
+  const [possibleMovesMap, setPossibleMovesMap] = useState({});
   const [lastMove, setLastMove] = useState({ from: null, to: null });
 
   useEffect(() => {
@@ -31,6 +32,8 @@ export default function ChessBoard() {
         setLastMove({ from, to });
         setFen(game.fen());
         setIsUserTurn(true);
+        setSelectedSquare(null);
+        setPossibleMovesMap({});
       }
     };
     stockfishRef.current.postMessage(`position fen ${game.fen()}`);
@@ -50,17 +53,29 @@ export default function ChessBoard() {
   const handleSquareClick = (x, y) => {
     if (!isUserTurn || game.isGameOver()) return;
     const square = "abcdefgh"[x] + (8 - y);
+
     if (!selectedSquare) {
       const piece = game.get(square);
       if (piece && piece.color === game.turn()) {
         setSelectedSquare(square);
+        const moves = game.moves({ square, verbose: true });
+        const moveInfo = {};
+        moves.forEach((m) => {
+          moveInfo[m.to] = { isCapture: !!m.captured };
+        });
+        setPossibleMovesMap(moveInfo);
       }
     } else {
       if (selectedSquare === square) {
         setSelectedSquare(null);
+        setPossibleMovesMap({});
       } else {
-        handleMove(selectedSquare, square);
+        const isLegal = possibleMovesMap[square];
+        if (isLegal) {
+          handleMove(selectedSquare, square);
+        }
         setSelectedSquare(null);
+        setPossibleMovesMap({});
       }
     }
   };
@@ -94,7 +109,6 @@ export default function ChessBoard() {
 
     return (
       <div className="relative">
-        {/* Tabuleiro */}
         <div className="grid grid-cols-8 w-[380px] md:w-[650px] border-4 border-[#c29d5d] rounded-2xl shadow-2xl overflow-hidden">
           {board.flat().map((square, idx) => {
             const x = idx % 8;
@@ -104,17 +118,27 @@ export default function ChessBoard() {
             const isSelected = selectedSquare === coord;
             const isLastMoveFrom = coord === lastMove.from;
             const isLastMoveTo = coord === lastMove.to;
+            const move = possibleMovesMap[coord];
+            const isMoveOption = move !== undefined;
+            const isCapture = move?.isCapture;
 
             return (
               <div
                 key={coord}
                 onClick={() => handleSquareClick(x, y)}
-                className={`aspect-square flex items-center justify-center text-3xl cursor-pointer select-none transition-all duration-100 
+                className={`aspect-square relative flex items-center justify-center text-3xl cursor-pointer select-none transition-all duration-100
                   ${isLight ? "bg-[#f0d9b5]" : "bg-[#b58863]"}
                   ${isLastMoveFrom || isLastMoveTo ? "border-4 border-yellow-500/50" : "border-0"}
                   ${isSelected ? "ring-4 ring-yellow-400 z-10" : "ring-0"}
                 `}
               >
+                {/* Jogadas possíveis (círculo de destino) */}
+                {isMoveOption && !isCapture && (
+                  <div className="absolute w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 rounded-full bg-black/30 z-10" />
+                )}
+                {isMoveOption && isCapture && (
+                  <div className="absolute w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 rounded-full border-[3px] border-red-500/70 z-10" />
+                )}
                 {getPieceImage(square, coord)}
               </div>
             );
