@@ -2,8 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import { motion } from "framer-motion";
-
-const stockfishUrl = "/stockfish/stockfish.js";
+import stockfish from "stockfish.wasm";
 
 function ChessBoard({ stockfishLevel, gameStarted }) {
   const [game] = useState(new Chess());
@@ -22,7 +21,8 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
   useEffect(() => {
     if (!gameStarted) return;
 
-    stockfishRef.current = new Worker(stockfishUrl);
+    // stockfish.wasm returns a Web Worker that runs the engine
+    stockfishRef.current = stockfish();
     stockfishRef.current.postMessage("uci");
 
     const onMessage = (e) => {
