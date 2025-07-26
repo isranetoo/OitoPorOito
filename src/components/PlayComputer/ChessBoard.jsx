@@ -21,22 +21,29 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
   useEffect(() => {
     if (!gameStarted) return;
 
-    // create the Stockfish Web Worker from public/stockfish
     stockfishRef.current = createStockfish();
+    if (!stockfishRef.current) {
+      addLog("Erro ao criar o Stockfish worker.");
+      return;
+    }
     stockfishRef.current.postMessage("uci");
 
     const onMessage = (e) => {
-      const msg = e.data;
-      // console.log("Stockfish response:", msg); // DEBUG
+      // Aceita tanto string quanto objeto { data: string }
+      let msg = e.data;
+      if (typeof msg !== "string" && msg && typeof msg.data === "string") {
+        msg = msg.data;
+      }
+      addLog(`[Stockfish] ${JSON.stringify(msg)}`);
       if (msg === "uciok") {
         stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
         stockfishRef.current.postMessage("isready");
       } else if (msg === "readyok") {
-        console.log("✅ Stockfish ready");
-        setEngineReady(true);
-        addLog("Engine pronta.");
-
-      } else if (msg.startsWith("bestmove")) {
+        if (!engineReady) {
+          setEngineReady(true);
+          addLog("Engine pronta!");
+        }
+      } else if (typeof msg === "string" && msg.startsWith("bestmove")) {
         const move = msg.split(" ")[1];
         if (move && move !== "(none)") {
           const from = move.slice(0, 2);
