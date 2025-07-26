@@ -1,10 +1,9 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import { motion } from "framer-motion";
 import createStockfish from "../../utils/stockfishLoader";
 
-function ChessBoard({ stockfishLevel, gameStarted }) {
+function ChessBoard({ stockfishLevel, gameStarted, setParentGame, setParentLog }) {
   const [game] = useState(new Chess());
   const [fen, setFen] = useState(game.fen());
   const [isUserTurn, setIsUserTurn] = useState(true);
@@ -18,7 +17,15 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
 
   const addLog = (text) => setLog((prev) => [...prev, text]);
 
-useEffect(() => {
+  useEffect(() => {
+    if (setParentGame) setParentGame(game);
+  }, [game, setParentGame]);
+  
+  useEffect(() => {
+    if (setParentLog) setParentLog(log);
+  }, [log, setParentLog]);
+
+  useEffect(() => {
     if (!gameStarted) return;
 
     setEngineReady(false); // Reset engineReady ao iniciar novo jogo
@@ -35,12 +42,12 @@ useEffect(() => {
       if (typeof msg !== "string" && msg && typeof msg.data === "string") {
         msg = msg.data;
       }
-      
+
       // Filtra mensagens de log muito verbosas
       if (typeof msg === "string" && !msg.startsWith("info") && msg !== "readyok") {
         addLog(`[Stockfish] ${JSON.stringify(msg)}`);
       }
-      
+
       if (msg === "uciok") {
         addLog("UCI inicializado, configurando nível...");
         stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
@@ -56,13 +63,13 @@ useEffect(() => {
             const from = move.slice(0, 2);
             const to = move.slice(2, 4);
             const promotion = move.length > 4 ? move.charAt(4) : undefined;
-            
-            const moveResult = game.move({ 
-              from, 
-              to, 
-              promotion: promotion || "q" // Promoção padrão para rainha se não especificada
+
+            const moveResult = game.move({
+              from,
+              to,
+              promotion: promotion || "q", // Promoção padrão para rainha se não especificada
             });
-            
+
             if (moveResult) {
               setLastMove({ from, to });
               setFen(game.fen());
@@ -104,7 +111,7 @@ useEffect(() => {
       setTimeout(makeAIMove, 500);
       return;
     }
-    
+
     if (!engineReady) {
       addLog("Engine ainda não pronta... Aguardando inicialização.");
       // Verifica status da engine
@@ -112,7 +119,7 @@ useEffect(() => {
       setTimeout(makeAIMove, 500);
       return;
     }
-    
+
     const currentFen = game.fen();
     addLog("Engine pensando...");
     stockfishRef.current.postMessage(`position fen ${currentFen}`);
@@ -167,8 +174,18 @@ useEffect(() => {
   };
 
   const pieceMap = {
-    bK: "bK.png", bQ: "bQ.png", bR: "bR.png", bN: "bN.png", bB: "bB.png", bP: "bP.png",
-    wK: "wK.png", wQ: "wQ.png", wR: "wR.png", wN: "wN.png", wB: "wB.png", wP: "wP.png",
+    bK: "bK.png",
+    bQ: "bQ.png",
+    bR: "bR.png",
+    bN: "bN.png",
+    bB: "bB.png",
+    bP: "bP.png",
+    wK: "wK.png",
+    wQ: "wQ.png",
+    wR: "wR.png",
+    wN: "wN.png",
+    wB: "wB.png",
+    wP: "wP.png",
   };
 
   const getPieceImage = (piece, coord) => {
@@ -252,24 +269,6 @@ useEffect(() => {
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       {renderBoard()}
-      {!gameStarted && (
-        <div className="mt-4 text-lg text-yellow-300 font-semibold">
-          Clique em ▶ Play para começar!
-        </div>
-      )}
-      {gameStarted && game.isGameOver() && (
-        <div className="mt-2 text-lg text-white font-semibold">
-          {game.isCheckmate()
-            ? `Xeque-mate! ${game.turn() === "w" ? "Preto" : "Branco"} venceu.`
-            : "Empate!"}
-        </div>
-      )}
-      {/* Log de mensagens */}
-      <div className="w-full max-w-lg mt-4 bg-black/60 rounded p-2 text-xs text-yellow-100 font-mono h-32 overflow-y-auto">
-        {log.map((l, i) => (
-          <div key={i}>{l}</div>
-        ))}
-      </div>
     </div>
   );
 }

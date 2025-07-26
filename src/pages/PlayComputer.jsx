@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import ChessBoard from "../components/PlayComputer/ChessBoard";
 import BotSidebar from "../components/PlayComputer/BotSidebar";
 import PlayerInfo from "../components/PlayComputer/PlayerInfo";
+import GameStatusLog from "../components/PlayComputer/GameStatusLog";
 import Navbar from "../components/Navbar";
 
 export default function PlayComputer() {
   const [stockfishLevel, setStockfishLevel] = useState(5);
   const [gameStarted, setGameStarted] = useState(false);
+  const [game, setGame] = useState(null);
+  const [log, setLog] = useState([]);
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] text-white">
       <Navbar />
@@ -25,7 +28,12 @@ export default function PlayComputer() {
               isBot={true}
             />
             {/* Tabuleiro */}
-            <ChessBoard stockfishLevel={stockfishLevel} gameStarted={gameStarted} />
+            <ChessBoard 
+              stockfishLevel={stockfishLevel} 
+              gameStarted={gameStarted} 
+              setParentGame={setGame} 
+              setParentLog={setLog}
+            />
             {/* Footer do usuário */}
             <PlayerInfo
               avatar="/assets/img/puzzle1.png"
@@ -36,9 +44,26 @@ export default function PlayComputer() {
               isBot={false}
             />
           </div>
-          {/* Sidebar dos bots */}
+          {/* Sidebar dos bots ou GameStatusLog */}
           <div className="mt-8 md:mt-0 md:ml-8 flex-shrink-0">
-            <BotSidebar stockfishLevel={stockfishLevel} setStockfishLevel={setStockfishLevel} onPlayClick={() => setGameStarted(true)} gameStarted={gameStarted} />
+            {!gameStarted ? (
+              <BotSidebar stockfishLevel={stockfishLevel} setStockfishLevel={setStockfishLevel} onPlayClick={() => setGameStarted(true)} gameStarted={gameStarted} />
+            ) : (
+              <div className="flex flex-col items-center gap-4 p-4 bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] rounded-2xl border border-[#c29d5d]/30 shadow-xl">
+                <GameStatusLog
+                  renderBoard={() => null}
+                  gameStarted={gameStarted}
+                  game={game}
+                  log={log}
+                />
+                <button
+                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded font-semibold hover:bg-red-600 transition-all duration-150"
+                  onClick={() => window.location.reload()}
+                >
+                  Reiniciar Jogo
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>
