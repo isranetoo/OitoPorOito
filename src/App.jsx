@@ -7,6 +7,7 @@ import ChessNewsGrid from "./components/ChessNewsGrid";
 import DownloadAppScreen from "./components/DownloadAppScreen";
 import ChessTopPlayers from './components/ChessTopPlayers';
 import ChessBoardWithCTA from './components/ChessBoardWithCTA';
+import PlayerStatsCard from './components/PlayerStatsCard';
 
 function App() {
   return (
@@ -16,7 +17,6 @@ function App() {
       <main className="flex flex-col items-center bg-[#2c2c2c] px-8 pt-8">
         {/* CONTAINER PRINCIPAL */}
         <div className="flex w-full max-w-[1650px] items-start gap-[90px] ">
-          
           {/* LADO ESQUERDO: Top Players */}
           <div className="w-[280px] ">
             <ChessTopPlayers />
@@ -40,6 +40,11 @@ function App() {
             <div className="mt-4 w-full ">
               <DownloadAppScreen />
             </div>
+          </div>
+
+          {/* LADO DIREITO: Player Stats */}
+          <div className="w-[280px] ">
+            <PlayerStatsCard />
           </div>
         </div>
       </main>
