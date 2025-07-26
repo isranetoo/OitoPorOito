@@ -1,53 +1,90 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import { motion } from "framer-motion";
 
 const stockfishUrl = "/stockfish/stockfish.js";
 
-
-export default function ChessBoard({ stockfishLevel, gameStarted }) {
+function ChessBoard({ stockfishLevel, gameStarted }) {
   const [game] = useState(new Chess());
   const [fen, setFen] = useState(game.fen());
   const [isUserTurn, setIsUserTurn] = useState(true);
+  const [engineReady, setEngineReady] = useState(false);
+  const [log, setLog] = useState([]);
+
   const stockfishRef = useRef(null);
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [possibleMovesMap, setPossibleMovesMap] = useState({});
   const [lastMove, setLastMove] = useState({ from: null, to: null });
 
+  const addLog = (text) => setLog((prev) => [...prev, text]);
+
   useEffect(() => {
     if (!gameStarted) return;
+
     stockfishRef.current = new Worker(stockfishUrl);
     stockfishRef.current.postMessage("uci");
-    stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
-    stockfishRef.current.postMessage("isready");
-    return () => stockfishRef.current.terminate();
+
+    const onMessage = (e) => {
+      const msg = e.data;
+      // console.log("Stockfish response:", msg); // DEBUG
+      if (msg === "uciok") {
+        stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
+        stockfishRef.current.postMessage("isready");
+      } else if (msg === "readyok") {
+        setEngineReady(true);
+        addLog("Engine pronta.");
+      } else if (msg.startsWith("bestmove")) {
+        const move = msg.split(" ")[1];
+        if (move && move !== "(none)") {
+          const from = move.slice(0, 2);
+          const to = move.slice(2, 4);
+          game.move({ from, to, promotion: "q" });
+          setLastMove({ from, to });
+          setFen(game.fen());
+          setIsUserTurn(true);
+          setSelectedSquare(null);
+          setPossibleMovesMap({});
+          addLog(`Engine jogou: ${move}`);
+        }
+      }
+    };
+
+    stockfishRef.current.addEventListener("message", onMessage);
+
+    return () => {
+      stockfishRef.current.removeEventListener("message", onMessage);
+      stockfishRef.current.terminate();
+    };
+    // eslint-disable-next-line
   }, [stockfishLevel, gameStarted]);
 
   const makeAIMove = () => {
-    stockfishRef.current.onmessage = (e) => {
-      if (e.data.startsWith("bestmove")) {
-        const move = e.data.split(" ")[1];
-        const from = move.slice(0, 2);
-        const to = move.slice(2, 4);
-        game.move({ from, to, promotion: "q" });
-        setLastMove({ from, to });
-        setFen(game.fen());
-        setIsUserTurn(true);
-        setSelectedSquare(null);
-        setPossibleMovesMap({});
-      }
-    };
-    stockfishRef.current.postMessage(`position fen ${game.fen()}`);
+    if (!stockfishRef.current || !engineReady) {
+      addLog("Engine ainda não pronta...");
+      setTimeout(makeAIMove, 100);
+      return;
+    }
+    const currentFen = game.fen();
+    addLog("Engine pensando...");
+    stockfishRef.current.postMessage(`position fen ${currentFen}`);
     stockfishRef.current.postMessage("go depth 15");
   };
 
   const handleMove = (from, to) => {
-    const move = game.move({ from, to, promotion: "q" });
-    if (move) {
-      setLastMove({ from, to });
-      setFen(game.fen());
-      setIsUserTurn(false);
-      setTimeout(() => makeAIMove(), 400);
+    try {
+      const move = game.move({ from, to, promotion: "q" });
+      if (move) {
+        setLastMove({ from, to });
+        setFen(game.fen());
+        setIsUserTurn(false);
+        addLog(`Você jogou: ${from}${to}`);
+        setTimeout(() => makeAIMove(), 300); // Delay para permitir atualização visual
+      } else {
+        addLog("Movimento inválido.");
+      }
+    } catch (err) {
+      addLog("Erro: " + err.message);
     }
   };
 
@@ -133,7 +170,6 @@ export default function ChessBoard({ stockfishLevel, gameStarted }) {
                   ${isSelected ? "ring-4 ring-yellow-400 z-10" : "ring-0"}
                 `}
               >
-                {/* Jogadas possíveis (círculo de destino) */}
                 {isMoveOption && !isCapture && (
                   <div className="absolute w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 rounded-full bg-black/30 z-10" />
                 )}
@@ -169,7 +205,9 @@ export default function ChessBoard({ stockfishLevel, gameStarted }) {
     <div className="flex flex-col items-center gap-4 p-4">
       {renderBoard()}
       {!gameStarted && (
-        <div className="mt-4 text-lg text-yellow-300 font-semibold">Clique em ▶ Play para começar!</div>
+        <div className="mt-4 text-lg text-yellow-300 font-semibold">
+          Clique em ▶ Play para começar!
+        </div>
       )}
       {gameStarted && game.isGameOver() && (
         <div className="mt-2 text-lg text-white font-semibold">
@@ -178,6 +216,14 @@ export default function ChessBoard({ stockfishLevel, gameStarted }) {
             : "Empate!"}
         </div>
       )}
+      {/* Log de mensagens */}
+      <div className="w-full max-w-lg mt-4 bg-black/60 rounded p-2 text-xs text-yellow-100 font-mono h-32 overflow-y-auto">
+        {log.map((l, i) => (
+          <div key={i}>{l}</div>
+        ))}
+      </div>
     </div>
   );
 }
+
+export default ChessBoard;
