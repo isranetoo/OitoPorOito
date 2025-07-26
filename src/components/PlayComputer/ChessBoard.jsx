@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
+import { motion } from "framer-motion";
 
 const stockfishUrl = "/stockfish/stockfish.js";
 
@@ -10,6 +11,7 @@ export default function ChessBoard() {
   const [isUserTurn, setIsUserTurn] = useState(true);
   const stockfishRef = useRef(null);
   const [selectedSquare, setSelectedSquare] = useState(null);
+  const [lastMove, setLastMove] = useState({ from: null, to: null });
 
   useEffect(() => {
     stockfishRef.current = new Worker(stockfishUrl);
@@ -23,7 +25,10 @@ export default function ChessBoard() {
     stockfishRef.current.onmessage = (e) => {
       if (e.data.startsWith("bestmove")) {
         const move = e.data.split(" ")[1];
-        game.move({ from: move.slice(0, 2), to: move.slice(2, 4), promotion: "q" });
+        const from = move.slice(0, 2);
+        const to = move.slice(2, 4);
+        game.move({ from, to, promotion: "q" });
+        setLastMove({ from, to });
         setFen(game.fen());
         setIsUserTurn(true);
       }
@@ -35,6 +40,7 @@ export default function ChessBoard() {
   const handleMove = (from, to) => {
     const move = game.move({ from, to, promotion: "q" });
     if (move) {
+      setLastMove({ from, to });
       setFen(game.fen());
       setIsUserTurn(false);
       setTimeout(() => makeAIMove(), 400);
@@ -64,17 +70,21 @@ export default function ChessBoard() {
     wK: "wK.png", wQ: "wQ.png", wR: "wR.png", wN: "wN.png", wB: "wB.png", wP: "wP.png",
   };
 
-  const getPieceImage = (piece) => {
+  const getPieceImage = (piece, coord) => {
     if (!piece) return null;
     const key = (piece.color === "w" ? "w" : "b") + piece.type.toUpperCase();
     const img = pieceMap[key];
     if (!img) return null;
     return (
-      <img
+      <motion.img
+        layoutId={coord + "-" + key}
         src={`/assets/pieces/${img}`}
         alt={key}
         className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 pointer-events-none select-none"
         draggable={false}
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0.6 }}
+        transition={{ duration: 0.25 }}
       />
     );
   };
@@ -92,16 +102,20 @@ export default function ChessBoard() {
             const isLight = (x + (8 - y)) % 2 === 0;
             const coord = "abcdefgh"[x] + (8 - y);
             const isSelected = selectedSquare === coord;
+            const isLastMoveFrom = coord === lastMove.from;
+            const isLastMoveTo = coord === lastMove.to;
 
             return (
               <div
                 key={coord}
                 onClick={() => handleSquareClick(x, y)}
-                className={`aspect-square flex items-center justify-center text-3xl cursor-pointer select-none transition-all duration-100 ${
-                  isSelected ? "ring-4 ring-yellow-400" : ""
-                } ${isLight ? "bg-[#f0d9b5]" : "bg-[#b58863]"}`}
+                className={`aspect-square flex items-center justify-center text-3xl cursor-pointer select-none transition-all duration-100 
+                  ${isLight ? "bg-[#f0d9b5]" : "bg-[#b58863]"}
+                  ${isLastMoveFrom || isLastMoveTo ? "border-4 border-yellow-500/50" : "border-0"}
+                  ${isSelected ? "ring-4 ring-yellow-400 z-10" : "ring-0"}
+                `}
               >
-                {getPieceImage(square)}
+                {getPieceImage(square, coord)}
               </div>
             );
           })}
