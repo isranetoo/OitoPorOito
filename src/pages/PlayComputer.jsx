@@ -1,12 +1,13 @@
 
-import React from "react";
-
+import React, { useState } from "react";
 import ChessBoard from "../components/PlayComputer/ChessBoard";
 import BotSidebar from "../components/PlayComputer/BotSidebar";
 import PlayerInfo from "../components/PlayComputer/PlayerInfo";
 import Navbar from "../components/Navbar";
 
 export default function PlayComputer() {
+  const [stockfishLevel, setStockfishLevel] = useState(5);
+  const [gameStarted, setGameStarted] = useState(false);
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] text-white">
       <Navbar />
@@ -24,7 +25,7 @@ export default function PlayComputer() {
               isBot={true}
             />
             {/* Tabuleiro */}
-            <ChessBoard />
+            <ChessBoard stockfishLevel={stockfishLevel} gameStarted={gameStarted} />
             {/* Footer do usuário */}
             <PlayerInfo
               avatar="/assets/img/puzzle1.png"
@@ -37,7 +38,7 @@ export default function PlayComputer() {
           </div>
           {/* Sidebar dos bots */}
           <div className="mt-8 md:mt-0 md:ml-8 flex-shrink-0">
-            <BotSidebar />
+            <BotSidebar stockfishLevel={stockfishLevel} setStockfishLevel={setStockfishLevel} onPlayClick={() => setGameStarted(true)} gameStarted={gameStarted} />
           </div>
         </div>
       </main>

@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 
 const stockfishUrl = "/stockfish/stockfish.js";
 
-export default function ChessBoard() {
+
+export default function ChessBoard({ stockfishLevel, gameStarted }) {
   const [game] = useState(new Chess());
   const [fen, setFen] = useState(game.fen());
-  const [stockfishLevel, setStockfishLevel] = useState(5);
   const [isUserTurn, setIsUserTurn] = useState(true);
   const stockfishRef = useRef(null);
   const [selectedSquare, setSelectedSquare] = useState(null);
@@ -15,12 +15,13 @@ export default function ChessBoard() {
   const [lastMove, setLastMove] = useState({ from: null, to: null });
 
   useEffect(() => {
+    if (!gameStarted) return;
     stockfishRef.current = new Worker(stockfishUrl);
     stockfishRef.current.postMessage("uci");
     stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
     stockfishRef.current.postMessage("isready");
     return () => stockfishRef.current.terminate();
-  }, [stockfishLevel]);
+  }, [stockfishLevel, gameStarted]);
 
   const makeAIMove = () => {
     stockfishRef.current.onmessage = (e) => {
@@ -51,7 +52,7 @@ export default function ChessBoard() {
   };
 
   const handleSquareClick = (x, y) => {
-    if (!isUserTurn || game.isGameOver()) return;
+    if (!gameStarted || !isUserTurn || game.isGameOver()) return;
     const square = "abcdefgh"[x] + (8 - y);
 
     if (!selectedSquare) {
@@ -167,7 +168,10 @@ export default function ChessBoard() {
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       {renderBoard()}
-      {game.isGameOver() && (
+      {!gameStarted && (
+        <div className="mt-4 text-lg text-yellow-300 font-semibold">Clique em ▶ Play para começar!</div>
+      )}
+      {gameStarted && game.isGameOver() && (
         <div className="mt-2 text-lg text-white font-semibold">
           {game.isCheckmate()
             ? `Xeque-mate! ${game.turn() === "w" ? "Preto" : "Branco"} venceu.`

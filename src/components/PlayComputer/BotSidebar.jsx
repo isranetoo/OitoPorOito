@@ -25,10 +25,7 @@ const bots = [
   { name: "Athletes", count: 12 },
 ];
 
-import { useState } from "react";
-
-export default function BotSidebar() {
-  const [stockfishLevel, setStockfishLevel] = useState(5);
+export default function BotSidebar({ stockfishLevel, setStockfishLevel, onPlayClick, gameStarted }) {
   // Função para reiniciar a página
   const handleRestart = () => window.location.reload();
 
@@ -62,6 +59,7 @@ export default function BotSidebar() {
             className="rounded p-1 bg-[#1a1a1a] text-white border border-[#c29d5d]/40 focus:ring-2 focus:ring-[#c29d5d]"
             value={stockfishLevel}
             onChange={(e) => setStockfishLevel(Number(e.target.value))}
+            disabled={gameStarted}
           >
             {[...Array(21).keys()].map((n) => (
               <option key={n} value={n}>
@@ -97,7 +95,11 @@ export default function BotSidebar() {
         ))}
       </div>
 
-      <button className="w-full mt-4 bg-gradient-to-r from-[#e7c27d] to-[#c29d5d] text-black py-2.5 rounded-xl text-lg font-bold shadow-lg hover:from-[#ffe7b3] hover:to-[#e7c27d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d]">
+      <button
+        className="w-full mt-4 bg-gradient-to-r from-[#e7c27d] to-[#c29d5d] text-black py-2.5 rounded-xl text-lg font-bold shadow-lg hover:from-[#ffe7b3] hover:to-[#e7c27d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d]"
+        onClick={onPlayClick}
+        disabled={gameStarted}
+      >
         ▶ Play
       </button>
     </div>
