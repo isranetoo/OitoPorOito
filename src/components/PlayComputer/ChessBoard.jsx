@@ -18,9 +18,10 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
 
   const addLog = (text) => setLog((prev) => [...prev, text]);
 
-  useEffect(() => {
+useEffect(() => {
     if (!gameStarted) return;
 
+    setEngineReady(false); // Reset engineReady ao iniciar novo jogo
     stockfishRef.current = createStockfish();
     if (!stockfishRef.current) {
       addLog("Erro ao criar o Stockfish worker.");
@@ -34,27 +35,49 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
       if (typeof msg !== "string" && msg && typeof msg.data === "string") {
         msg = msg.data;
       }
-      addLog(`[Stockfish] ${JSON.stringify(msg)}`);
+      
+      // Filtra mensagens de log muito verbosas
+      if (typeof msg === "string" && !msg.startsWith("info") && msg !== "readyok") {
+        addLog(`[Stockfish] ${JSON.stringify(msg)}`);
+      }
+      
       if (msg === "uciok") {
+        addLog("UCI inicializado, configurando nível...");
         stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
         stockfishRef.current.postMessage("isready");
       } else if (msg === "readyok") {
-        if (!engineReady) {
-          setEngineReady(true);
-          addLog("Engine pronta!");
-        }
+        setEngineReady(true);
+        addLog("Engine pronta!");
       } else if (typeof msg === "string" && msg.startsWith("bestmove")) {
         const move = msg.split(" ")[1];
         if (move && move !== "(none)") {
-          const from = move.slice(0, 2);
-          const to = move.slice(2, 4);
-          game.move({ from, to, promotion: "q" });
-          setLastMove({ from, to });
-          setFen(game.fen());
-          setIsUserTurn(true);
-          setSelectedSquare(null);
-          setPossibleMovesMap({});
-          addLog(`Engine jogou: ${move}`);
+          addLog(`Engine decidiu jogar: ${move}`);
+          try {
+            const from = move.slice(0, 2);
+            const to = move.slice(2, 4);
+            const promotion = move.length > 4 ? move.charAt(4) : undefined;
+            
+            const moveResult = game.move({ 
+              from, 
+              to, 
+              promotion: promotion || "q" // Promoção padrão para rainha se não especificada
+            });
+            
+            if (moveResult) {
+              setLastMove({ from, to });
+              setFen(game.fen());
+              setIsUserTurn(true);
+              setSelectedSquare(null);
+              setPossibleMovesMap({});
+              addLog(`Engine jogou: ${from}${to}`);
+            } else {
+              addLog(`Erro: movimento inválido ${from}${to}`);
+            }
+          } catch (err) {
+            addLog(`Erro ao processar movimento da engine: ${err.message}`);
+          }
+        } else {
+          addLog("A engine não encontrou um movimento válido.");
         }
       }
     };
@@ -69,11 +92,27 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
   }, [stockfishLevel, gameStarted]);
 
   const makeAIMove = () => {
-    if (!stockfishRef.current || !engineReady) {
-      addLog("Engine ainda não pronta...");
-      setTimeout(makeAIMove, 100);
+    if (!stockfishRef.current) {
+      addLog("Engine não inicializada. Tentando reiniciar...");
+      stockfishRef.current = createStockfish();
+      if (!stockfishRef.current) {
+        addLog("Falha ao inicializar a engine.");
+        return;
+      }
+      // Reinicia o processo de configuração da engine
+      stockfishRef.current.postMessage("uci");
+      setTimeout(makeAIMove, 500);
       return;
     }
+    
+    if (!engineReady) {
+      addLog("Engine ainda não pronta... Aguardando inicialização.");
+      // Verifica status da engine
+      stockfishRef.current.postMessage("isready");
+      setTimeout(makeAIMove, 500);
+      return;
+    }
+    
     const currentFen = game.fen();
     addLog("Engine pensando...");
     stockfishRef.current.postMessage(`position fen ${currentFen}`);
