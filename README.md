@@ -19,6 +19,8 @@ OitoPorOito é uma plataforma web para jogar xadrez online, resolver puzzles, ap
    npm install
    ```
 
+   Esse comando também baixa a engine de xadrez [`stockfish.wasm`](https://www.npmjs.com/package/stockfish.wasm), utilizada para gerar os lances do robô.
+
 3. **Inicie o servidor de desenvolvimento:**
    ```powershell
    npm run dev
