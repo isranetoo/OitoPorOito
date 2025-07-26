@@ -42,7 +42,6 @@ export default function PlayComputer() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

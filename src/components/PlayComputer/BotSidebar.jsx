@@ -27,7 +27,7 @@ const bots = [
 
 export default function BotSidebar() {
   return (
-    <div className="space-y-7 text-sm bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] rounded-2xl border border-[#c29d5d]/30 p-4 shadow-xl">
+    <div className="space-y-6 text-sm bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] rounded-2xl border border-[#c29d5d]/30 p-4 shadow-xl">
       {/* Destaque principal */}
       <div className="flex items-center gap-4 bg-[#232526]/80 rounded-xl p-3 border border-[#c29d5d]/30 shadow">
         <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border-2 border-[#c29d5d]/40 overflow-hidden">
