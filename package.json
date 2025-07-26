@@ -36,6 +36,7 @@
     "react-router-dom": "^7.6.1",
     "recharts": "^2.8.0",
     "stockfish": "^16.0.0",
+    "stockfish.wasm": "^0.10.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "vite": "^4.4.5"

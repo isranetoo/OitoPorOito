@@ -25,7 +25,13 @@ const bots = [
   { name: "Athletes", count: 12 },
 ];
 
+import { useState } from "react";
+
 export default function BotSidebar() {
+  const [stockfishLevel, setStockfishLevel] = useState(5);
+  // Função para reiniciar a página
+  const handleRestart = () => window.location.reload();
+
   return (
     <div className="space-y-6 text-sm bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] rounded-2xl border border-[#c29d5d]/30 p-4 shadow-xl">
       {/* Destaque principal */}
@@ -47,6 +53,30 @@ export default function BotSidebar() {
         </div>
       </div>
       <p className="text-gray-400 text-base italic px-1">Thanks for playing chess with me. Good luck!</p>
+
+      {/* Nível do Stockfish e Reiniciar */}
+      <div className="flex flex-col gap-3 bg-[#232526]/70 border border-[#c29d5d]/20 p-3 rounded-xl shadow">
+        <label className="text-[#e7c27d] font-semibold text-base">Nível do Robô</label>
+        <div className="flex items-center gap-2">
+          <select
+            className="rounded p-1 bg-[#1a1a1a] text-white border border-[#c29d5d]/40 focus:ring-2 focus:ring-[#c29d5d]"
+            value={stockfishLevel}
+            onChange={(e) => setStockfishLevel(Number(e.target.value))}
+          >
+            {[...Array(21).keys()].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={handleRestart}
+            className="px-3 py-1.5 bg-red-500 text-white rounded font-semibold text-sm hover:bg-red-600 transition-all duration-150 ml-2"
+          >
+            Reiniciar
+          </button>
+        </div>
+      </div>
 
       {/* Lista de categorias */}
       <div className="space-y-3">

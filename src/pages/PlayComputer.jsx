@@ -5,7 +5,6 @@ import ChessBoard from "../components/PlayComputer/ChessBoard";
 import BotSidebar from "../components/PlayComputer/BotSidebar";
 import PlayerInfo from "../components/PlayComputer/PlayerInfo";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 export default function PlayComputer() {
   return (

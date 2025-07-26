@@ -17,6 +17,8 @@ export default function AppRoutes() {
         <Route path="/signup" element={<Signup />} />
         <Route path='/ratings-players' element={<RatingsPlayers />} />
         <Route path='/play-computer' element={<PlayComputer />} />
+        
+        <Route path="*" element={<div>Page Not Found</div>} />
       </Routes>
     </BrowserRouter>
   );
