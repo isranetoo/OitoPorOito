@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import RatingsPlayers from './pages/RatingsPlayers';
+import PlayComputer from './pages/PlayComputer';
 
 export default function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path='/ratings-players' element={<RatingsPlayers />} />
+        <Route path='/play-computer' element={<PlayComputer />} />
       </Routes>
     </BrowserRouter>
   );
