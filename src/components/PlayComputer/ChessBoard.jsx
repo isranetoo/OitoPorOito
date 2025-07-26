@@ -32,8 +32,13 @@ function ChessBoard({ stockfishLevel, gameStarted }) {
         stockfishRef.current.postMessage(`setoption name Skill Level value ${stockfishLevel}`);
         stockfishRef.current.postMessage("isready");
       } else if (msg === "readyok") {
+        console.log("✅ Stockfish ready");
         setEngineReady(true);
         addLog("Engine pronta.");
+
+        // Teste manual
+        stockfishRef.current.postMessage("position startpos");
+        stockfishRef.current.postMessage("go depth 10");
       } else if (msg.startsWith("bestmove")) {
         const move = msg.split(" ")[1];
         if (move && move !== "(none)") {
