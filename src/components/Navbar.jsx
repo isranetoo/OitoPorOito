@@ -5,7 +5,14 @@ import { motion } from "framer-motion";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navItems = ['🎮 Play','🧩 Puzzles','📘 Learn','👀 Watch','📰 News','👥 Social'];
+  const navItems = [
+    { label: '🎮 Play', href: '/play' },
+    { label: '🧩 Puzzles' },
+    { label: '📘 Learn' },
+    { label: '👀 Watch' },
+    { label: '📰 News' },
+    { label: '👥 Social' }
+  ];
 
   return (
     <motion.nav
@@ -38,12 +45,22 @@ export default function Navbar() {
       {/* Menu de navegação - desktop (aparece só em lg+) */}
       <div className="hidden lg:flex flex-wrap justify-center gap-2 md:gap-7 text-[14px] md:text-[15px] mb-2 md:mb-0">
         {navItems.map((item) => (
-          <div
-            key={item}
-            className="flex items-center gap-2 cursor-pointer px-3 md:px-4 py-1.5 md:py-2 rounded-xl font-bold bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] hover:text-[#c29d5d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] text-xs md:text-base"
-          >
-            {item}
-          </div>
+          item.href ? (
+            <a
+              key={item.label}
+              href={item.href}
+              className="flex items-center gap-2 cursor-pointer px-3 md:px-4 py-1.5 md:py-2 rounded-xl font-bold bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] hover:text-[#c29d5d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] text-xs md:text-base"
+            >
+              {item.label}
+            </a>
+          ) : (
+            <div
+              key={item.label}
+              className="flex items-center gap-2 cursor-pointer px-3 md:px-4 py-1.5 md:py-2 rounded-xl font-bold bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] hover:text-[#c29d5d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] text-xs md:text-base"
+            >
+              {item.label}
+            </div>
+          )
         ))}
       </div>
 
@@ -82,12 +99,22 @@ export default function Navbar() {
           <div className="flex flex-col items-center justify-center h-full gap-8" onClick={e => e.stopPropagation()}>
             <div className="w-full max-w-xs mx-auto rounded-2xl border-2 border-[#c29d5d]/60 bg-[#232526] bg-opacity-95 shadow-2xl p-8 flex flex-col gap-4">
               {navItems.map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-2 cursor-pointer px-4 py-3 rounded-xl font-bold bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] hover:text-[#c29d5d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] text-base text-center justify-center"
-                >
-                  {item}
-                </div>
+                item.href ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="flex items-center gap-2 cursor-pointer px-4 py-3 rounded-xl font-bold bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] hover:text-[#c29d5d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] text-base text-center justify-center"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <div
+                    key={item.label}
+                    className="flex items-center gap-2 cursor-pointer px-4 py-3 rounded-xl font-bold bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] hover:text-[#c29d5d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] text-base text-center justify-center"
+                  >
+                    {item.label}
+                  </div>
+                )
               ))}
               <div className="flex flex-col gap-3 w-full mt-6">
                 <a href="/signup">

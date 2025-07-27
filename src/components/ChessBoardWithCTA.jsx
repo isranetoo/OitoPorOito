@@ -99,7 +99,7 @@ export default function ChessBoardWithCTA() {
           <span className="font-bold text-white">136,285</span> Playing Now
         </div>
         <Link
-          to="/play-game"
+          to="/play"
           className="w-full bg-gradient-to-r from-[#e7c27d] to-[#c29d5d] text-black py-2.5 rounded-xl text-lg font-bold mb-3 shadow-lg hover:from-[#ffe7b3] hover:to-[#e7c27d] hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#c29d5d] flex items-center justify-center text-center"
         >
           ▶ Play Online

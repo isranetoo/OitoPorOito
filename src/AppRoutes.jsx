@@ -6,10 +6,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import RatingsPlayers from './pages/RatingsPlayers';
-
-
 import PlayComputer from './pages/PlayComputer';
-import PlayGame from './pages/PlayGame';
+
+import Play from './pages/Play';
 
 export default function AppRoutes() {
   return (
@@ -20,7 +19,7 @@ export default function AppRoutes() {
         <Route path="/signup" element={<Signup />} />
         <Route path='/ratings-players' element={<RatingsPlayers />} />
         <Route path='/play-computer' element={<PlayComputer />} />
-        <Route path='/play-game' element={<PlayGame />} />
+        <Route path='/play' element={<Play />} />
         
         <Route path="*" element={<div>Page Not Found</div>} />
       </Routes>
