@@ -10,7 +10,7 @@ export default function Navbar() {
     { label: '🧩 Puzzles' },
     { label: '📘 Learn' },
     { label: '👀 Watch' },
-    { label: '📰 News' },
+    { label: '📰 News', href: '/chessnews' },
     { label: '👥 Social' }
   ];
 
