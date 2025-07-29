@@ -2,10 +2,12 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+
 import DailyPuzzleBoard from "../components/Chessnews/DailyPuzzleBoard";
 import RecentNews from "../components/Chessnews/RecentNews";
 import MainHighlight from "../components/Chessnews/MainHighlight";
 import NewsSection from "../components/Chessnews/NewsSection";
+import AulaCard from "../components/Chessnews/AulaCard";
 import ArticlesSection from "../components/Chessnews/ArticlesSection";
 import BlogsSection from "../components/Chessnews/BlogsSection";
 import EventsSection from "../components/Chessnews/EventsSection";
@@ -32,6 +34,8 @@ export default function Chessnews() {
             <MainHighlight />
             {/* Notícias */}
             <NewsSection />
+            {/* Aulas */}
+            <AulaCard />
             {/* Artigos */}
             <ArticlesSection />
             {/* Vídeos */}
