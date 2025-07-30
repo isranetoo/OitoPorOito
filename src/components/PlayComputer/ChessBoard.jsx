@@ -198,11 +198,12 @@ function ChessBoard({ stockfishLevel, gameStarted, setParentGame, setParentLog }
         layoutId={coord + "-" + key}
         src={`/assets/pieces/${img}`}
         alt={key}
-        className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 pointer-events-none select-none"
+        className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 pointer-events-none select-none"
         draggable={false}
         animate={{ opacity: 1 }}
         initial={{ opacity: 0.6 }}
         transition={{ duration: 0.25 }}
+        style={{ maxWidth: '98%', maxHeight: '98%' }}
       />
     );
   };
