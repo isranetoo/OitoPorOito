@@ -4,6 +4,7 @@ import App from './App';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import RatingsPlayers from './pages/RatingsPlayers';
@@ -12,6 +13,7 @@ import Play from './pages/Play';
 import Chessnews from './pages/Chessnews';
 import ChessSocial from './pages/ChessSocial';
 import LearnChess from './pages/LearnChess';
+import NotFoundPage from './pages/404Page';
 
 
 export default function AppRoutes() {
@@ -27,7 +29,7 @@ export default function AppRoutes() {
         <Route path='/chessnews' element={<Chessnews />} />
         <Route path='/social' element={<ChessSocial />} />
         <Route path="/learn-chess" element={<LearnChess />} />
-        <Route path="*" element={<div>Page Not Found</div>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
