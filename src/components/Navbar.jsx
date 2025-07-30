@@ -8,10 +8,10 @@ export default function Navbar() {
   const navItems = [
     { label: '🎮 Play', href: '/play' },
     { label: '🧩 Puzzles' },
-    { label: '📘 Learn' },
+    { label: '📘 Learn', href: '/learn-chess' },
     { label: '👀 Watch' },
     { label: '📰 News', href: '/chessnews' },
-    { label: '👥 Social' }
+    { label: '👥 Social', href: '/social' }
   ];
 
   return (
