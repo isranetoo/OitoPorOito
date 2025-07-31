@@ -7,7 +7,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
     { label: '🎮 Play', href: '/play' },
-    { label: '🧩 Puzzles' },
+    { label: '🧩 Puzzles', href: '/puzzle-chess' },
     { label: '📘 Learn', href: '/learn-chess' },
     { label: '👀 Watch' },
     { label: '📰 News', href: '/chessnews' },

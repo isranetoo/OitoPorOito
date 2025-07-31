@@ -1,11 +1,11 @@
 
 import Navbar from "../components/Navbar";
 import { FaFire, FaCalendarAlt, FaUsers, FaBook, FaChartBar } from "react-icons/fa";
-import LearnChessBoard from "../components/LearnChessBoard";
+import PuzzleChessBoard from "../components/ChessPuzzle/PuzzleChessBoard";
 
 
 
-export default function LearnChess() {
+export default function PuzzleChess() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#232526] via-[#1a1a1a] to-[#232526] text-white">
       <Navbar />
@@ -14,7 +14,7 @@ export default function LearnChess() {
           {/* Coluna do tabuleiro e infos */}
           <div className="flex flex-col items-center w-full md:w-auto">
             {/* Tabuleiro */}
-            <LearnChessBoard />
+            <PuzzleChessBoard />
           </div>
           {/* Sidebar */}
           <div className="mt-8 md:mt-0 md:ml-8 flex-shrink-0">

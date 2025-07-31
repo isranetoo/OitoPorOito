@@ -1,8 +1,8 @@
 import React from "react";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
-import ChessPuzzleCard from './components/ChessPuzzleCard';
-import ChessLessonCard from './components/ChessLessonCard';
+import ChessPuzzleCard from './components/ChessPuzzle/ChessPuzzleCard';
+import PuzzleChessCard from './components/ChessPuzzle/PuzzleChessCard';
 import ChessNewsGrid from "./components/ChessNewsGrid";
 import DownloadAppScreen from "./components/DownloadAppScreen";
 import ChessTopPlayers from './components/ChessTopPlayers';
@@ -32,7 +32,7 @@ function App() {
               <ChessPuzzleCard />
             </div>
             <div className="w-full ">
-              <ChessLessonCard />
+              <PuzzleChessCard />
             </div>
             <div className="w-full ">
               <ChessNewsGrid />

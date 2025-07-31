@@ -12,7 +12,7 @@ import PlayComputer from './pages/PlayComputer';
 import Play from './pages/Play';
 import Chessnews from './pages/Chessnews';
 import ChessSocial from './pages/ChessSocial';
-import LearnChess from './pages/LearnChess';
+import PuzzleChess from './pages/PuzzleChess';  
 import NotFoundPage from './pages/404Page';
 
 
@@ -28,7 +28,7 @@ export default function AppRoutes() {
         <Route path='/play' element={<Play />} />
         <Route path='/chessnews' element={<Chessnews />} />
         <Route path='/social' element={<ChessSocial />} />
-        <Route path="/learn-chess" element={<LearnChess />} />
+        <Route path="/puzzle-chess" element={<PuzzleChess />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
