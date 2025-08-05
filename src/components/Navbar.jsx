@@ -1,5 +1,5 @@
 // components/Navbar.jsx
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
 export default function Navbar() {
@@ -71,30 +71,54 @@ export default function Navbar() {
   ];
 
   const navItems = [
-    { label: '🎮 Jogar', dropdown: 'play' },
-    { label: '🧩 Puzzles', dropdown: 'puzzle' },
-    { label: '📘 Learn', dropdown: 'learn' },
-    { label: '👀 Watch', dropdown: 'watch' },
-    { label: '📰 News', dropdown: 'news' },
-    { label: '👥 Social', dropdown: 'social' }
+    { label: '🎮 Jogar', dropdown: 'play', href: '/play' },
+    { label: '🧩 Puzzles', dropdown: 'puzzle', href: '/puzzle-chess' },
+    { label: '📘 Learn', dropdown: 'learn', href: '/learn/lessons' },
+    { label: '👀 Watch', dropdown: 'watch', href: '/watch/events' },
+    { label: '📰 News', dropdown: 'news', href: '/chessnews' },
+    { label: '👥 Social', dropdown: 'social', href: '/social' }
   ];
+
+
+  // Dropdown delay logic por dropdown
+  const dropdownTimeoutRef = useRef({});
+  const handleDropdownEnter = (key, setOpen) => {
+    if (dropdownTimeoutRef.current[key]) {
+      clearTimeout(dropdownTimeoutRef.current[key]);
+      dropdownTimeoutRef.current[key] = null;
+    }
+    setOpen(true);
+  };
+  const handleDropdownLeave = (key, setOpen) => {
+    if (dropdownTimeoutRef.current[key]) {
+      clearTimeout(dropdownTimeoutRef.current[key]);
+    }
+    dropdownTimeoutRef.current[key] = setTimeout(() => {
+      setOpen(false);
+      dropdownTimeoutRef.current[key] = null;
+    }, 180);
+  };
 
   const renderDropdown = (item, menuList, setOpen, isOpen) => (
     <div
       key={item.label}
       className="relative"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      style={{ display: 'inline-block' }}
+      onMouseEnter={() => handleDropdownEnter(item.label, setOpen)}
+      onMouseLeave={() => handleDropdownLeave(item.label, setOpen)}
     >
-      <button
+      <a
+        href={item.href}
         className="flex items-center gap-2 cursor-pointer px-3 md:px-4 py-1.5 md:py-2 rounded-xl font-bold 
                    bg-gradient-to-r from-[#232526] to-[#2d2d2d] shadow-lg 
                    border-2 border-[#c29d5d]/40 hover:from-[#444] hover:to-[#232526] 
                    hover:text-[#c29d5d] hover:scale-105 transition-all duration-200"
+        onClick={() => setOpen(false)}
       >
         {item.label}
-      </button>
+      </a>
 
+      {/* Dropdown is part of the same wrapper, so mouse can move between button and dropdown without closing */}
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -108,6 +132,7 @@ export default function Navbar() {
               href={sub.href}
               className="flex items-center gap-3 px-3 py-2 rounded-lg 
                          hover:bg-[#333] hover:text-[#c29d5d] transition-colors"
+              onClick={() => setOpen(false)}
             >
               <span>{sub.icon}</span>
               <span>{sub.text}</span>
