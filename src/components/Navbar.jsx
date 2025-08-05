@@ -73,7 +73,7 @@ export default function Navbar() {
   const navItems = [
     { label: '🎮 Jogar', dropdown: 'play', href: '/play' },
     { label: '🧩 Puzzles', dropdown: 'puzzle', href: '/puzzle-chess' },
-    { label: '📘 Learn', dropdown: 'learn', href: '/learn/lessons' },
+    { label: '📘 Learn', dropdown: 'learn', href: '/learn' },
     { label: '👀 Watch', dropdown: 'watch', href: '/chess-events' },
     { label: '📰 News', dropdown: 'news', href: '/chessnews' },
     { label: '👥 Social', dropdown: 'social', href: '/social' }
