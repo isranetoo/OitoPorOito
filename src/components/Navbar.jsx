@@ -12,11 +12,12 @@ export default function Navbar() {
   const [watchOpen, setWatchOpen] = useState(false);
   const [newsOpen, setNewsOpen] = useState(false);
   const [socialOpen, setSocialOpen] = useState(false);
+  const [maisOpen, setMaisOpen] = useState(false);
 
   // Submenus
   const playMenuItems = [
     { icon: '♟️', text: 'Jogar', href: '/play' },
-    { icon: '🤖', text: 'Jogar com Bots', href: '/play/bots' },
+    { icon: '🤖', text: 'Jogar com Bots', href: '/play-computer' },
     { icon: '🧔', text: 'Jogar contra o Treinador', href: '/play/trainer' },
     { icon: '🏅', text: 'Torneios', href: '/tournaments' },
     { icon: '🎲', text: '4 Jogadores e Variantes', href: '/variants' },
@@ -70,13 +71,25 @@ export default function Navbar() {
     { icon: '🧑‍🏫', text: 'Treinadores', href: '/social/coaches' }
   ];
 
+  const maisMenuItems = [
+    { icon: '📚', text: 'Aberturas', href: '/mais/aberturas' },
+    { icon: '🏛️', text: 'Biblioteca', href: '/mais/biblioteca' },
+    { icon: '🧭', text: 'Explorador', href: '/mais/explorador' },
+    { icon: '♟️', text: 'Xadrez Solo', href: '/mais/xadrez-solo' },
+    { icon: '👁️', text: 'Visão', href: '/mais/visao' },
+    { icon: '✅', text: 'Xadrez por Votação', href: '/mais/xadrez-por-votacao' },
+    { icon: '📱', text: 'Aplicativos de Celular', href: '/mais/apps' },
+    { icon: '🧒', text: 'ChessKid', href: '/mais/chesskid' }
+  ];
+
   const navItems = [
     { label: '🎮 Jogar', dropdown: 'play', href: '/play' },
     { label: '🧩 Puzzles', dropdown: 'puzzle', href: '/puzzle-chess' },
     { label: '📘 Learn', dropdown: 'learn', href: '/learn' },
     { label: '👀 Watch', dropdown: 'watch', href: '/chess-events' },
     { label: '📰 News', dropdown: 'news', href: '/chessnews' },
-    { label: '👥 Social', dropdown: 'social', href: '/social' }
+    { label: '👥 Social', dropdown: 'social', href: '/social' },
+    { label: 'Mais', dropdown: 'mais', href: '/mais' }
   ];
 
 
@@ -172,6 +185,7 @@ export default function Navbar() {
             if (item.dropdown === 'watch') return renderDropdown(item, watchMenuItems, setWatchOpen, watchOpen);
             if (item.dropdown === 'news') return renderDropdown(item, newsMenuItems, setNewsOpen, newsOpen);
             if (item.dropdown === 'social') return renderDropdown(item, socialMenuItems, setSocialOpen, socialOpen);
+            if (item.dropdown === 'mais') return renderDropdown(item, maisMenuItems, setMaisOpen, maisOpen);
 
             return (
               <a
