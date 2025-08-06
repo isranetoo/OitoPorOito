@@ -11,7 +11,10 @@ import RatingsPlayers from './pages/RatingsPlayers';
 import PlayComputer from './pages/PlayComputer';
 import Play from './pages/Play';
 import Chessnews from './pages/Chessnews';
+
 import ChessSocial from './pages/ChessSocial';
+import ChessFriends from './pages/SocialChess/ChessFriends';
+
 import PuzzleChess from './pages/PuzzleChess';  
 import ChessEvents from './pages/ChessEvents';
 import LearnChess from './pages/LearnChess';
@@ -30,7 +33,10 @@ export default function AppRoutes() {
         <Route path='/play-computer' element={<PlayComputer />} />
         <Route path='/play' element={<Play />} />
         <Route path='/chessnews' element={<Chessnews />} />
+
         <Route path='/social' element={<ChessSocial />} />
+        <Route path="/social/friends" element={<ChessFriends />} />
+
         <Route path="/puzzle-chess" element={<PuzzleChess />} />
         <Route path="/learn" element={<LearnChess />} />
         <Route path="/chess-events" element={<ChessEvents />} />
