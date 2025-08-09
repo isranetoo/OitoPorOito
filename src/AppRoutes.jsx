@@ -14,6 +14,7 @@ import Chessnews from './pages/Chessnews';
 
 import ChessSocial from './pages/ChessSocial';
 import ChessFriends from './pages/SocialChess/ChessFriends';
+import ChessClubs from './pages/SocialChess/ChessClubs';
 
 import PuzzleChess from './pages/PuzzleChess';  
 import ChessEvents from './pages/ChessEvents';
@@ -36,6 +37,7 @@ export default function AppRoutes() {
 
         <Route path='/social' element={<ChessSocial />} />
         <Route path="/social/friends" element={<ChessFriends />} />
+        <Route path="/social/clubs" element={<ChessClubs />} />
 
         <Route path="/puzzle-chess" element={<PuzzleChess />} />
         <Route path="/learn" element={<LearnChess />} />
